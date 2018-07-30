@@ -11,7 +11,7 @@ console.log('Hello Noteful!');
 
 // INSERT EXPRESS APP CODE HERE...
 
-// app.use(express.static("public"));
+app.use(express.static("public"));
 
 // app.get("/", (req, res) => {
   
