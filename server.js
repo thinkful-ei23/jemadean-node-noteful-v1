@@ -5,11 +5,15 @@ const express = require('express');
 
 const data = require('./db/notes');
 
+const morgan = require('morgan');
+
 const app = express();
 
 console.log('Hello Noteful!');
 
 // INSERT EXPRESS APP CODE HERE...
+
+app.use(morgan('dev'));
 
 app.use(express.static('public'));
 
