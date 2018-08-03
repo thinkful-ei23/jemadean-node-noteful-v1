@@ -4,6 +4,8 @@
 const express = require('express');
 
 const data = require('./db/notes');
+const simDB = require('./dbb/simDB');
+const notes = simDB.initialize(data);
 
 const { PORT } = require('./config');
 
