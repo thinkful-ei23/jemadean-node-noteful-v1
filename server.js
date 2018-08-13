@@ -38,7 +38,11 @@ app.get('/api/notes/:id', (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.json(item);
+    if (item) {
+      res.json(item);
+    } else {
+      next();
+    }
   });
 });
 
@@ -56,6 +60,12 @@ app.put('/api/notes/:id', (req, res, next) => {
     console.log(req.body);
     console.log(updateObj);
   });
+
+  if (!updateObj.title) {
+    const err = new Error('Missing `title` in request body');
+    err.status = 400;
+    return next(err);
+  }
 
   notes.update(id, updateObj, (err, item)=> {
     if (err) {
