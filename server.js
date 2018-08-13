@@ -4,7 +4,7 @@
 const express = require('express');
 
 const data = require('./db/notes');
-const simDB = require('./dbb/simDB');
+const simDB = require('./db/simDB');
 const notes = simDB.initialize(data);
 
 const { PORT } = require('./config');
@@ -21,13 +21,14 @@ app.use(express.static('public'));
 
 app.use(logIncomingRequests);
 
-app.get('/api/notes', (req, res) => {
-  const searchTerm = req.query.searchTerm;
-  let filteredData = data;
-  if (searchTerm) {
-    filteredData = filteredData.filter(item => JSON.stringify(item).includes(searchTerm));
-  }
-  res.json(filteredData);
+app.get('/api/notes', (req, res, next) => {
+  const { searchTerm } = req.query;  
+  notes.filter(searchTerm, (err, list) => {
+    if (err) {
+      return next(err);
+    }
+    res.json(list);
+  });
 });
 
 app.get('/api/notes/:id', (req, res) => {
@@ -38,7 +39,7 @@ app.get('/api/notes/:id', (req, res) => {
 
 app.use(function (req, res, next) {
   let err = new Error('Not Found');
-  err.status = 404;
+  err.status  = 404;
   res.status(404).json({ message: 'Not Found' });
 });
 
